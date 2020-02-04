@@ -1,9 +1,11 @@
 'use strict';
 
 const KEY = 'books';
+const BOOKS_IN_PAGE = 3;
 var gBooks = _createBooks();
 var gOnEdit = false;
 var gCurrBook = null;
+var gCurrPage = 1;
 
 
 
@@ -43,6 +45,7 @@ function findBook(bookId) {
 }
 
 function AddBook(book) {
+    if (getCurrLang() === 'he') book.price /= 3.5;
     if (gOnEdit) {
         var edittedBookIdx = gBooks.findIndex(book=> book.id === gCurrBook.id);
         gBooks[edittedBookIdx].price = book.price;
@@ -61,7 +64,9 @@ function removeBook(bookId) {
 }
 
 function getBooksToDisplay() {
-    return [...gBooks];
+    var from = (gCurrPage - 1) * BOOKS_IN_PAGE;
+    var to = from + BOOKS_IN_PAGE;
+    return gBooks.slice(from, to);
 }
 function _createBooks() {
     var books = getFromLocalStorage(KEY);
@@ -82,4 +87,14 @@ function _createBook(book) {
         img: book.img,
         rate: 0
     }
+}
+function changePage(diff) {
+    gCurrPage += diff;
+    var lastPage = Math.ceil(gBooks.length / BOOKS_IN_PAGE);
+
+    if (gCurrPage > lastPage) gCurrPage = 1;
+    else if (gCurrPage < 1) gCurrPage = lastPage;
+}
+function pickPage(idx) {
+    gCurrPage = idx;
 }

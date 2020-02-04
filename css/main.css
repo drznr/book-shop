@@ -66,9 +66,13 @@ td {
 .toggle {
     position: absolute;
     bottom: -2rem;
-    left: 26.5%;
+    right: 26.5%;
     font-size: 1.5rem;
     cursor: pointer;
+}
+body.rtl .toggle {
+    right: initial;
+    left: 26.5%;
 }
 .toggle::selection {
     color: white;
@@ -122,4 +126,29 @@ td {
 }
 .sorters {
     cursor: pointer;
+}
+body.rtl {
+    direction: rtl;
+}
+.lang {
+    position: absolute;
+    bottom: -2rem;
+    left: 26.5%;
+    font-size: 1.2rem;
+}
+body.rtl .lang {
+    left: initial;
+    right: 26.5%;
+}
+tr:nth-child(even) {
+    background-color: #eef7fa;
+}
+.paging {
+    text-align: center;
+    margin-top: 5px;
+}
+.btn-paging {
+    padding: .2rem .5rem;
+    font-weight: 700;
+    border-radius: 3px;
 }

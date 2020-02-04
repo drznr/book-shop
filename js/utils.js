@@ -21,3 +21,11 @@ function _dynamicSort(property) {
         return result * sortOrder;
     }
 }
+function formatCurrency(num, lang) {
+    var format = (lang === 'en') ? 'en-US' : 'he-IL';
+    var currency = (lang === 'en') ? 'USD' : 'ILS';
+    num = (lang === 'en') ? num : num * 3.5;
+    
+   
+    return new Intl.NumberFormat(format,{ style: 'currency', currency: currency }).format(num);
+}

@@ -10,21 +10,31 @@
 <body onload="onInit()">
     <aside class="modal"></aside>
     <header>
-        <h1>Welcome to my bookshop</h1>
-        <span class="toggle" onclick="onFormToggle()" title="Add a new book">&#x2795;</span>
+        <h1 data-trans="title"></h1>
+        <span class="toggle" onclick="onFormToggle()" data-trans="btnPlus" title="Add a new book">&#x2795;</span>
+        <select onchange="onSetLang(this.value)" class="lang">
+            <option value="en">English</option>
+            <option value="he">עברית</option>
+        </select>
     </header>
     <div class="container">
         <section class="books-container"></section>
+        <section class="paging">
+            <button data-trans="btnPrev" class="btn-paging" onclick="onChangePage(-1)">Prev Page</button>
+            <span class="pages"></span>
+            <button data-trans="btnNext" class="btn-paging" onclick="onChangePage(1)">Next Page</button>
+        </section>
         <section class="form-container hide">
-            <input type="text" placeholder="Title" data-key="name" />
-            <input type="text" placeholder="Price" data-key="price" />
-            <input type="text" placeholder="Image Url" data-key="img" />
-            <button class="btn add" onclick="onAddBook()">Add Book</button>
+            <input type="text" placeholder="Title" data-trans="bookTitlePlaceholder" data-key="name" />
+            <input type="text" placeholder="Price" data-trans="bookPricePlaceholder" data-key="price" />
+            <input type="text" placeholder="Image Url" data-trans="bookImgPlaceholder" data-key="img" />
+            <button class="btn add" data-trans="btnAdd" onclick="onAddBook()">Add Book</button>
         </section>
     </div>
 
     <script src="js/utils.js"></script>
     <script src="js/storage-service.js"></script>
+    <script src="js/i18n-service.js"></script>
     <script src="js/shop-service.js"></script>
     <script src="js/shop-controller.js"></script>
 </body>

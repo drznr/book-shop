@@ -2,6 +2,7 @@
 
 function onInit() {
     renderBooks();
+    doTrans();
 }
 
 function renderRate() {
@@ -13,24 +14,24 @@ function renderRate() {
 
 function renderBooks() {
     var books = getBooksToDisplay();
-    var strHTML = '<table><thead><td>Id</td><td class="sorters" onclick="onSortTable(this.innerText)">Title</td><td class="sorters" onclick="onSortTable(this.innerText)">Price</td><td>Actions</td></thead><tbody>';
+    var strHTML = '<table><thead><td data-trans="bookId">Id</td><td class="sorters" onclick="onSortTable(this.dataset.sort)" data-sort="Title" data-trans="bookName">Title</td><td class="sorters" onclick="onSortTable(this.dataset.sort)" data-sort="Price" data-trans="bookPrice">Price</td><td data-trans="bookActions">Actions</td></thead><tbody>';
     strHTML += books.map((book, idx) => `
     <tr>
         <td>${idx}</td>
         <td>${book.name}</td>
-        <td>${book.price}</td>
+        <td>${formatCurrency(book.price, getCurrLang())}</td>
         <td>
             <table class="btns-table">
                 <tbody>
                     <tr>
                         <td>
-                            <button class="btn read" data-id="${book.id}" onclick="onInfoDisplay(this.dataset.id)">Read</button>
+                            <button class="btn read" data-id="${book.id}" data-trans="btnRead" onclick="onInfoDisplay(this.dataset.id)">Read</button>
                         </td>
                         <td>
-                            <button class="btn update" data-id="${book.id}" onclick="onUpdateBook(this.dataset.id)">Update</button>
+                            <button class="btn update" data-id="${book.id}" data-trans="btnUpdate" onclick="onUpdateBook(this.dataset.id)">Update</button>
                         </td>
                         <td>
-                            <button class="btn delete" data-id="${book.id}" onclick="onRemoveBook(this.dataset.id)">Delete</button>
+                            <button class="btn delete" data-id="${book.id}" data-trans="btnDelete" onclick="onRemoveBook(this.dataset.id)">Delete</button>
                         </td>
                     </tr>
                 </tbody>
@@ -41,6 +42,8 @@ function renderBooks() {
     strHTML += '</tbody></table>';
     var elBooksContainer = document.querySelector('.books-container');
     elBooksContainer.innerHTML = strHTML;
+    renderPageNotf();
+    doTrans();
 }
 
 function onRemoveBook(bookId) {
@@ -84,7 +87,7 @@ function onInfoDisplay(bookId) {
         <span class="close-modal" onclick="_closeModal()">X</span>
         <img src="${book.img}" />
         <p>${book.name}</p>
-        <p>${book.price}.00$</p>
+        <p>${formatCurrency(book.price, getCurrLang())}</p>
         <span onclick="onRateChange(-1)" class="rate-btn">-</span><span class="rate">${book.rate}</span><span onclick="onRateChange(1)" class="rate-btn">+</span>
     `;
     changeCurrBook(book);
@@ -102,4 +105,35 @@ function onRateChange(amount) {
 function onSortTable(sortBy) {
     sortBooks(sortBy);
     renderBooks();
+}
+function onSetLang(lang) {
+    setLang(lang);
+    
+    if (lang === 'he') {
+        document.body.classList.add('rtl');
+        document.title = 'מסמך';
+    } else {
+        document.body.classList.remove('rtl');
+        document.title = 'Document';
+    }
+
+    renderBooks();
+}
+
+function onChangePage(diff) {
+    changePage(diff);
+    renderBooks();
+}
+function renderPageNotf() {
+    var elPages = document.querySelector('.pages');
+    elPages.innerHTML = '';
+    var pagesAmount = Math.ceil(gBooks.length / BOOKS_IN_PAGE);
+
+    for (let i = 1; i <= pagesAmount; i++) {
+        elPages.innerHTML += `<button class="btn-paging" onclick="onPagePicked(${i})">${i}<button>`;
+    }
+}
+function onPagePicked(idx) {
+   pickPage(idx);
+   renderBooks();
 }
